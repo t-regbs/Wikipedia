@@ -1,6 +1,7 @@
 package com.example.wikipedia.fragments
 
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.example.wikipedia.adapters.ArticleCardRecyclerAdapter
 import com.example.wikipedia.models.WikiResult
 import com.example.wikipedia.providers.ArticleDataProvider
 import kotlinx.android.synthetic.main.fragment_explore.*
+import java.lang.Exception
 
 /**
  * A simple [Fragment] subclass.
@@ -49,15 +51,35 @@ class ExploreFragment : Fragment() {
         exploreRecycler!!.layoutManager = LinearLayoutManager(context)
         exploreRecycler!!.adapter = adapter
 
+        refresher?.setOnRefreshListener {
+            getRandomArticles()
+        }
+
+        getRandomArticles()
+
         return view
     }
 
     private fun getRandomArticles() {
-        articleProvider.getRandom(15) { wikiResult ->
-            adapter.currentResults.clear()
-            adapter.currentResults.addAll(wikiResult.query!!.pages)
-            activity?.runOnUiThread { adapter.notifyDataSetChanged() }
+        refresher?.isRefreshing = true
+
+        try {
+            articleProvider.getRandom(15) { wikiResult ->
+                adapter.currentResults.clear()
+                adapter.currentResults.addAll(wikiResult.query!!.pages)
+                activity?.runOnUiThread {
+                    adapter.notifyDataSetChanged()
+                    refresher?.isRefreshing = false
+                }
+            }
+        } catch (ex: Exception) {
+            //show dialog
+            val builder = AlertDialog.Builder(activity)
+            builder.setMessage(ex.message).setTitle("oops!!")
+            val dialog = builder.create()
+            dialog.show()
         }
+
     }
 
 }
