@@ -15,7 +15,9 @@ import com.example.wikipedia.WikiApplication
 import com.example.wikipedia.adapters.ArticleCardRecyclerAdapter
 import com.example.wikipedia.adapters.ArticleListItemRecyclerAdapter
 import com.example.wikipedia.managers.WikiManager
+import com.example.wikipedia.models.WikiPage
 import kotlinx.android.synthetic.main.fragment_favourites.*
+import org.jetbrains.anko.doAsync
 
 /**
  * A simple [Fragment] subclass.
@@ -23,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_favourites.*
 class FavouritesFragment : Fragment() {
     private var wikiManager: WikiManager? = null
     var favouritesRecycler: RecyclerView? = null
+    private val adapter: ArticleCardRecyclerAdapter = ArticleCardRecyclerAdapter()
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -40,10 +43,20 @@ class FavouritesFragment : Fragment() {
         favouritesRecycler = view.findViewById(R.id.favourites_article_recycler)
 
         favouritesRecycler!!.layoutManager = LinearLayoutManager(context)
-        favouritesRecycler!!.adapter = ArticleCardRecyclerAdapter()
+        favouritesRecycler!!.adapter = adapter
 
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        doAsync {
+            val favouriteArticles = wikiManager!!.getFavourites()
+            adapter.currentResults.clear()
+            adapter.currentResults.addAll(favouriteArticles as ArrayList<WikiPage>)
+            activity?.runOnUiThread{ adapter.notifyDataSetChanged() }
+        }
+    }
 
 }
