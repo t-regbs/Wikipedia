@@ -1,9 +1,10 @@
 package com.example.wikipedia.models
 
+
 object Urls {
     val BaseUrl = "https://en.wikipedia.org/w/api.php"
 
-    fun getSearchUrl(term: String, skip: Int, take: Int ): String {
+    fun getSearchUrl(term: String, skip: Int, take: Int) : String{
         return BaseUrl + "?action=query" +
                 "&formatversion=2" +
                 "&generator=prefixsearch" +
@@ -19,7 +20,7 @@ object Urls {
                 "&inprop=url"
     }
 
-    fun getRandomUrl(take: Int) : String {
+    fun getRandomUrl(take: Int) : String{
         return BaseUrl + "?action=query" +
                 "&format=json" +
                 "&formatversion=2" +

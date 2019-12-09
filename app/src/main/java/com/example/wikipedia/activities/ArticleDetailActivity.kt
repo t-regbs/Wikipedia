@@ -40,7 +40,7 @@ class ArticleDetailActivity : AppCompatActivity() {
             }
         }
 
-        article_detail_webview.loadUrl(currentPage!!.fullUrl)
+        article_detail_webview.loadUrl(currentPage!!.fullurl)
 
         wikiManager?.addHistory(currentPage!!)
     }

@@ -18,10 +18,12 @@ class ListItemHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private var currentPage: WikiPage? = null
 
     init {
-        var detailPageIntent = Intent(itemView.context, ArticleDetailActivity::class.java)
-        var pageJson = Gson().toJson(currentPage)
-        detailPageIntent.putExtra("page", pageJson)
-        itemView.context.startActivity(detailPageIntent)
+        itemView.setOnClickListener {view: View ->
+            var detailPageIntent = Intent(itemView.context, ArticleDetailActivity::class.java)
+            var pageJson = Gson().toJson(currentPage)
+            detailPageIntent.putExtra("page", pageJson)
+            itemView.context.startActivity(detailPageIntent)
+        }
     }
 
     fun updateWithPage(page: WikiPage) {

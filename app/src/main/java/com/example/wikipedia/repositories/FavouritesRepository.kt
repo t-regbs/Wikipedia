@@ -15,7 +15,7 @@ class FavouritesRepository(val databaseHelper: ArticleDatabaseOpenHelper) {
             insert(TABLE_NAME,
                 "id" to page.pageid,
                 "title" to page.title,
-                "url" to page.fullUrl,
+                "url" to page.fullurl,
                 "thumbnailJson" to Gson().toJson(page.thumbnail))
         }
     }
@@ -41,7 +41,7 @@ class FavouritesRepository(val databaseHelper: ArticleDatabaseOpenHelper) {
             val page = WikiPage()
             page.title = title
             page.pageid = id
-            page.fullUrl = url
+            page.fullurl = url
             page.thumbnail = Gson().fromJson(thumbnailJson, WikiThumbnail::class.java)
 
             pages.add(page)
